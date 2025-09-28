@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./list.db"
+}
+
+model Processed {
+  uid           Int           @id
+  date          DateTime
+  fromname      String?
+  from          String?
+  subject       String?
+  extractedName String?
+  attachments   Attachments[]
+  //attachments String
+}
+
+model Attachments {
+  createdAt   DateTime //@default(now())
+  id          Int       @id @default(autoincrement())
+  file        String
+  processed   Processed @relation(fields: [processedId], references: [uid])
+  processedId Int
+  //Processed    Processed? @relation(fields: [processedUid], references: [uid])
+  //processedUid Int?
+  //processed Processed[] @relation("aaa")
+}
+
+// npx prisma migrate dev --name <migration name>
